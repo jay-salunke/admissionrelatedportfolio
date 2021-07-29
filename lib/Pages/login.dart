@@ -14,8 +14,7 @@ class _LoginState extends State<Login> {
   String _emailId = "";
   String _password = "";
 
-  // TextEditingController _validate_password = TextEditingController();
-  // TextEditingController _validate_emailID = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _ValidateEmail(String email) {
@@ -27,7 +26,7 @@ class _LoginState extends State<Login> {
       return false;
   }
 
-  void _ValidateForm() {
+  void _validateForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       print('Successful your email is $_emailId , and password is $_password');
@@ -144,7 +143,7 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
-                  _ValidateForm();
+                  _validateForm();
                 },
                 child: Text(
                   "Login",
