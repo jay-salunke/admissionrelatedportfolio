@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -11,9 +11,29 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _isVisible = true;
 
-  TextEditingController _password = TextEditingController();
-  TextEditingController _emailID = TextEditingController();
+  String _emailId = "";
+  String _password = "";
+
+  // TextEditingController _validate_password = TextEditingController();
+  // TextEditingController _validate_emailID = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool _ValidateEmail(String email) {
+    RegExp regexemail =
+        RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
+    if (regexemail.hasMatch(email))
+      return true;
+    else
+      return false;
+  }
+
+  void _ValidateForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print('Successful your email is $_emailId , and password is $_password');
+    } else
+      print('Unsuccessful');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +46,6 @@ class _LoginState extends State<Login> {
           'KJ.Somaiya Polytechnic',
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'NotoSansKR',
             fontWeight: FontWeight.bold,
             fontSize: 25.0,
           ),
@@ -56,6 +75,7 @@ class _LoginState extends State<Login> {
                   obscureText: false,
                   cursorColor: Colors.red,
                   decoration: InputDecoration(
+                    fillColor: Colors.green,
                     suffixIcon: Icon(Icons.mail_outline_outlined),
                     labelText: 'Email ID',
                     labelStyle: TextStyle(
@@ -69,10 +89,13 @@ class _LoginState extends State<Login> {
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Email field is required';
-                    }
-                    return null;
+                      return 'Password field is required';
+                    } else if (!_ValidateEmail(value))
+                      return 'Password is invalid';
+                    else
+                      return null;
                   },
+                  onSaved: (value) => _emailId = value!,
                 ),
               ),
               SizedBox(
@@ -105,6 +128,15 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   obscureText: _isVisible,
+                  validator: (value) {
+                    if (value!.isEmpty)
+                      return 'Password is required';
+                    else if (value.length < 8)
+                      return 'Password must be more than 8 characters';
+                    else
+                      return null;
+                  },
+                  onSaved: (value) => _password = value!,
                 ),
               ),
               ElevatedButton(
@@ -112,11 +144,7 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    print("Success");
-                  } else {
-                    print("Unsuccesful");
-                  }
+                  _ValidateForm();
                 },
                 child: Text(
                   "Login",
