@@ -1,5 +1,8 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:admission_portfolio/Authentication/RegisterData.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -9,15 +12,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool _isVisible = true;
 
+  bool _isVisible = true;
   String _emailId = "";
   String _password = "";
+  final Authenticate _auth = Authenticate();
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _ValidateEmail(String email) {
+  bool _validateEmail(String email) {
     RegExp regexemail =
         RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
     if (regexemail.hasMatch(email))
@@ -89,12 +93,12 @@ class _LoginState extends State<Login> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Password field is required';
-                    } else if (!_ValidateEmail(value))
+                    } else if (!_validateEmail(value))
                       return 'Password is invalid';
                     else
                       return null;
                   },
-                  onSaved: (value) => _emailId = value!,
+                  onChanged: (value) => _emailId = value,
                 ),
               ),
               SizedBox(
@@ -135,14 +139,19 @@ class _LoginState extends State<Login> {
                     else
                       return null;
                   },
-                  onSaved: (value) => _password = value!,
+                  onChanged: (value) => _password = value,
+                ),
+              ),
+              InkWell(
+                child: Text(
+                  'Forgot Password'
                 ),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
-                onPressed: () {
+                onPressed: () async{
                   _validateForm();
                 },
                 child: Text(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:admission_portfolio/Authentication/RegisterData.dart';
+import 'package:admission_portfolio/Pages/login.dart';
+
+
 
 class SignupPage extends StatefulWidget {
   @override
@@ -12,6 +16,14 @@ class _SignupPageState extends State<SignupPage> {
   String _confirmPass = "";
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
+  final Authenticate authenticate = Authenticate();
+  @override
+  void dispose() {
+
+    _password.dispose();
+    _confirmPassword.dispose();
+    super.dispose();
+  }
 
   RegExp _regexName = RegExp('([a-z A-z]+)', caseSensitive: false);
   RegExp _regexEmail =
@@ -35,15 +47,10 @@ class _SignupPageState extends State<SignupPage> {
       print('$_name');
       print('$_emailID');
       print('$_pass');
+      print('$_confirmPass');
     } else {
       print("Unsuccessful");
     }
-  }
-
-  void dispose() {
-    _password.dispose();
-    _confirmPassword.dispose();
-    super.dispose();
   }
 
   @override
@@ -95,7 +102,7 @@ class _SignupPageState extends State<SignupPage> {
                       else
                         return null;
                     },
-                    onSaved: (value) => _name = value!,
+                    onChanged: (value) => _name = value,
                   ),
                 ),
                 Padding(
@@ -118,7 +125,7 @@ class _SignupPageState extends State<SignupPage> {
                       else
                         return null;
                     },
-                    onSaved: (value) => _emailID = value!,
+                    onChanged: (value) => _emailID = value,
                   ),
                 ),
                 Padding(
@@ -142,7 +149,7 @@ class _SignupPageState extends State<SignupPage> {
                       else
                         return null;
                     },
-                    onSaved: (value) => _password.text,
+                    onChanged: (value) => _password.text,
                   ),
                 ),
                 Padding(
@@ -165,7 +172,7 @@ class _SignupPageState extends State<SignupPage> {
                       else
                         return null;
                     },
-                    onSaved: (value) => _confirmPassword.text,
+                    onChanged: (value) => _confirmPassword.text,
                   ),
                 ),
                 SizedBox(
@@ -175,8 +182,20 @@ class _SignupPageState extends State<SignupPage> {
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     _validateForm();
+                    try {
+                      await authenticate.emailPassword(_emailID, _pass);
+                      authenticate.storeData(_name, _emailID, _pass);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
+
+                    } catch (e) {
+                      print(e.toString());
+                    }
                   },
                   child: Text(
                     "Signup",
