@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
 class Authenticate{
+
+  // firebase object of type Firebase_auth
    FirebaseAuth _auth = FirebaseAuth.instance;
 
 
@@ -43,7 +44,9 @@ class Authenticate{
   }
   //register with firebase
 
-
+// user logged in toh usse home page dikhe
+// else nhi hai toh usse firstscreen dikhe
+// user agar pehle se registered hai
 
 
 }
