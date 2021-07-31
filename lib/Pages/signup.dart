@@ -211,6 +211,7 @@ class _SignupPageState extends State<SignupPage> {
                         print(e.toString());
                       }
                     }
+
                   },
                   child: Text(
                     "Signup",
