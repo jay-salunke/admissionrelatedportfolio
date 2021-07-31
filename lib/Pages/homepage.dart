@@ -13,13 +13,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Home Page'
+            'Home Page'
         ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.logout_outlined),
+          ),
+        ],
         centerTitle: true,
       ),
       body: Center(
         child: Text(
-          'Home Page'
+            'Home Page'
         ),
       ),
     );
