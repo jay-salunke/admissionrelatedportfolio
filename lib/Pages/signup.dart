@@ -88,6 +88,7 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Name',
+                     suffixIcon: Icon(Icons.person_add_alt),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -111,6 +112,7 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email ID',
+                      suffixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -135,6 +137,12 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon( Icons.visibility_off_outlined,),
+                         onPressed: (){
+
+                         },
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -158,6 +166,11 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
+                      suffixIcon: IconButton(
+                        icon: Icon( Icons.visibility_off_outlined,),
+                        onPressed: (){
+                        },
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
