@@ -37,7 +37,7 @@ class _SignupPageState extends State<SignupPage> {
       return false;
   }
 
-  void _validateForm() {
+  bool _validateForm() {
     if (_formKey.currentState!.validate()) {
       _pass = _password.text;
       _confirmPass = _confirmPassword.text;
@@ -48,8 +48,10 @@ class _SignupPageState extends State<SignupPage> {
       print('$_emailID');
       print('$_pass');
       print('$_confirmPass');
+      return true;
     } else {
       print("Unsuccessful");
+      return false;
     }
   }
 
@@ -196,18 +198,18 @@ class _SignupPageState extends State<SignupPage> {
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                   ),
                   onPressed: () async {
-                    _validateForm();
-                    try {
-                      await authenticate.emailPassword(_emailID, _pass);
-                      authenticate.storeData(_name, _emailID, _pass);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ),
-                      );
-
-                    } catch (e) {
-                      print(e.toString());
+                    if(_validateForm()) {
+                      try {
+                        await authenticate.emailPassword(_emailID, _pass);
+                        authenticate.storeData(_name, _emailID, _pass);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      } catch (e) {
+                        print(e.toString());
+                      }
                     }
                   },
                   child: Text(

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class Authenticate{
    FirebaseAuth _auth = FirebaseAuth.instance;
@@ -9,6 +11,9 @@ class Authenticate{
    i.e if user is already logged in it will directly shows the home page else
    it will show the authentication page
    */
+
+
+
 
   Future<void> storeData(String name,String emailId,String password) async{
      String uid = _auth.currentUser!.uid.toString();
@@ -24,8 +29,17 @@ class Authenticate{
   }
 
   Future<void> emailPassword(String emailId,String password) async{
-     await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailId, password: password);
-    return ;
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailId, password: password);
+    }catch(signUpError){
+          if(signUpError is PlatformException){
+            if(signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE'){
+              print('Email is already in used');
+            }
+          }
+    }
+     return ;
   }
   //register with firebase
 
