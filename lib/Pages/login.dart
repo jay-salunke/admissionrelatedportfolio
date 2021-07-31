@@ -1,7 +1,9 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:admission_portfolio/Authentication/RegisterData.dart';
+import 'package:admission_portfolio/Pages/homepage.dart';
 
 
 class Login extends StatefulWidget {
@@ -38,6 +40,20 @@ class _LoginState extends State<Login> {
     } else
       print('Unsuccessful');
     return false;
+  }
+  Future<void> _signInWithEmailIdAndPassword() async{
+     try{
+       await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailId, password: _password);
+       Navigator.of(context).push(
+         MaterialPageRoute(
+           builder: (context) => HomePage(),
+         ),
+       );
+     }catch(e){
+       print(e);
+     }
+     
+     return ;
   }
 
   @override
@@ -154,7 +170,11 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () async{
-                  _validateForm();
+                  if(_validateForm())
+                    {
+                      _signInWithEmailIdAndPassword();
+                    }
+
                 },
                 child: Text(
                   "Login",
