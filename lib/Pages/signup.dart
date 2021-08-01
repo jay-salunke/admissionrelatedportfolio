@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:admission_portfolio/Authentication/RegisterData.dart';
+import 'package:admission_portfolio/Authentication/auth.dart';
 import 'package:admission_portfolio/Pages/login.dart';
 
 
@@ -10,13 +12,14 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+
   String _name = "";
   String _emailID = "";
   String _pass = "";
   String _confirmPass = "";
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
-  final Authenticate authenticate = Authenticate();
+
   @override
   void dispose() {
 
@@ -200,19 +203,28 @@ class _SignupPageState extends State<SignupPage> {
                   onPressed: () async {
                     if(_validateForm()) {
                       try {
-                        await authenticate.emailPassword(_emailID, _pass);
-                        authenticate.storeData(_name, _emailID, _pass);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ),
-                        );
-                      } catch (e) {
-                        print(e.toString());
-                      }
-                    }
+                         await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailID, password:_pass);
 
-                  },
+                          CollectionReference usersData = FirebaseFirestore.instance.collection('UsersDetails');
+                         usersData.add({
+                           'Name': _name,
+                           'EmailId':_emailID,
+                           'password':_pass,
+                           'uid': FirebaseAuth.instance.currentUser!.uid.toString(),
+                         });
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                          );
+                        }on FirebaseAuthException catch(e){
+                        print(e.toString());
+                               }
+                      }
+                    },
+
+
                   child: Text(
                     "Signup",
                     style: TextStyle(
