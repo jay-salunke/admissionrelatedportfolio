@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:admission_portfolio/Pages/login.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -212,13 +211,15 @@ class _SignupPageState extends State<SignupPage> {
                           'password': _pass,
                           'uid':
                               FirebaseAuth.instance.currentUser!.uid.toString(),
+                          'Role':'User',
                         });
 
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ),
-                        );
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => Login(),
+                        //   ),
+                        // );
+                        Navigator.pushNamedAndRemoveUntil(context, '/homepage', (route) => false);
                       } on FirebaseAuthException catch (e) {
                         print(e.toString());
                       }
