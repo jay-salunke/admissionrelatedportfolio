@@ -3,15 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:admission_portfolio/Pages/login.dart';
 
-
-
 class SignupPage extends StatefulWidget {
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   String _name = "";
   String _emailID = "";
   String _pass = "";
@@ -21,13 +18,12 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   void dispose() {
-
     _password.dispose();
     _confirmPassword.dispose();
     super.dispose();
   }
 
-  RegExp _regexName = RegExp('([a-z A-z]+)', caseSensitive: false);
+  RegExp _regexName = RegExp('(^[a-z A-Z]+)', caseSensitive: false);
   RegExp _regexEmail =
       RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -92,7 +88,7 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Name',
-                     suffixIcon: Icon(Icons.person_add_alt),
+                      suffixIcon: Icon(Icons.person_add_alt),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -142,10 +138,10 @@ class _SignupPageState extends State<SignupPage> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       suffixIcon: IconButton(
-                        icon: Icon( Icons.visibility_off_outlined,),
-                         onPressed: (){
-
-                         },
+                        icon: Icon(
+                          Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () {},
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -171,9 +167,10 @@ class _SignupPageState extends State<SignupPage> {
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
                       suffixIcon: IconButton(
-                        icon: Icon( Icons.visibility_off_outlined,),
-                        onPressed: (){
-                        },
+                        icon: Icon(
+                          Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () {},
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -200,30 +197,33 @@ class _SignupPageState extends State<SignupPage> {
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                   ),
                   onPressed: () async {
-                    if(_validateForm()) {
+                    if (_validateForm()) {
                       try {
-                         await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailID, password:_pass);
+                        await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                                email: _emailID, password: _pass);
 
-                          CollectionReference usersData = FirebaseFirestore.instance.collection('UsersDetails');
-                         usersData.add({
-                           'Name': _name,
-                           'EmailId':_emailID,
-                           'password':_pass,
-                           'uid': FirebaseAuth.instance.currentUser!.uid.toString(),
-                         });
+                        CollectionReference usersData = FirebaseFirestore
+                            .instance
+                            .collection('UsersDetails');
+                        usersData.add({
+                          'Name': _name,
+                          'EmailId': _emailID,
+                          'password': _pass,
+                          'uid':
+                              FirebaseAuth.instance.currentUser!.uid.toString(),
+                        });
 
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Login(),
-                            ),
-                          );
-                        }on FirebaseAuthException catch(e){
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      } on FirebaseAuthException catch (e) {
                         print(e.toString());
-                               }
                       }
-                    },
-
-
+                    }
+                  },
                   child: Text(
                     "Signup",
                     style: TextStyle(

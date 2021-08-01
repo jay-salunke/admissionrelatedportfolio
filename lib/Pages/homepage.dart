@@ -21,12 +21,14 @@ class _HomePageState extends State<HomePage> {
           automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
+            tooltip: 'Logout',
             onPressed: () async{
               await FirebaseAuth.instance.signOut();
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
             },
             icon: Icon(Icons.logout_outlined),
+
           ),
         ],
         centerTitle: true,
