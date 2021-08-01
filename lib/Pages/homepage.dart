@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:admission_portfolio/Authentication/auth.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -7,7 +8,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +18,14 @@ class _HomePageState extends State<HomePage> {
         title: Text(
             'Home Page'
         ),
+          automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () async{
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+            },
             icon: Icon(Icons.logout_outlined),
           ),
         ],
