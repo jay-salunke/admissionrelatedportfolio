@@ -1,4 +1,8 @@
-import 'package:admission_portfolio/Pages/signup.dart';
+import 'dart:developer';
+
+import 'package:admission_portfolio/Pages/signUp.dart';
+import 'package:admission_portfolio/authentication.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +20,26 @@ class _LoginState extends State<Login> {
   String _emailId = "";
   String _password = "";
 
+  Future<void> checkUserRole() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    final userRef = FirebaseFirestore.instance.collection("UsersDetails");
+    await userRef.where('uid',isEqualTo: uid).get().then((
+        QuerySnapshot value) => value.docs.forEach((DocumentSnapshot element) {
+          if((element.data() as Map<String,dynamic>)['Role'] == 'Admin'){
+            Navigator.pushNamedAndRemoveUntil(context,'/adminPage', (Route<dynamic>route) => false);
+          }else if((element.data() as Map<String,dynamic>)['Role'] == 'User'){
+            Navigator.pushNamedAndRemoveUntil(context,'/homepage', (Route<dynamic>route) => false);
+          }
+          else Navigator.pushNamedAndRemoveUntil(context,'/login', (Route<dynamic>route) => false);
+    }));
+
+  }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _validateEmail(String email) {
     RegExp regexemail =
-        RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
+    RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
     if (regexemail.hasMatch(email))
       return true;
     else
@@ -37,8 +55,6 @@ class _LoginState extends State<Login> {
       print('Unsuccessful');
     return false;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +162,9 @@ class _LoginState extends State<Login> {
             SizedBox(
               height: 15,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: InkWell(
@@ -160,10 +174,9 @@ class _LoginState extends State<Login> {
                         color: Colors.amber[700],
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-
                       ),
                     ),
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => SignupPage(),
@@ -173,16 +186,15 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 InkWell(
-                  child: Text('Forgot Password',
+                  child: Text(
+                    'Forgot Password',
                     style: TextStyle(
                       color: Colors.amber[700],
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-
                     ),
                   ),
                   onTap: () {},
-
                 ),
               ],
             ),
@@ -196,12 +208,16 @@ class _LoginState extends State<Login> {
               onPressed: () async {
                 try {
                   if (_validateForm()) {
-                   await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailId, password: _password);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/homepage', (route) => false);
-
-                    }
-                }catch(e){
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: _emailId, password: _password);
+                     String role = await Authentication().checkUserRole();
+                       if(role == 'Admin'){
+                         Navigator.pushNamedAndRemoveUntil(context,'/adminPage', (Route <dynamic> route) => false);
+                       }
+                     else if(role == 'User')Navigator.pushNamedAndRemoveUntil(context,'/homepage', (Route <dynamic> route) => false);
+                     else print('unauthorized access');
+                  }
+                } catch (e) {
                   print(e);
                 }
               },
