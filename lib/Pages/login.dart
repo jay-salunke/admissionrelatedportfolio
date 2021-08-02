@@ -1,7 +1,5 @@
-import 'dart:developer';
 
 import 'package:admission_portfolio/Pages/signUp.dart';
-import 'package:admission_portfolio/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,12 +208,8 @@ class _LoginState extends State<Login> {
                   if (_validateForm()) {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: _emailId, password: _password);
-                     String role = await Authentication().checkUserRole();
-                       if(role == 'Admin'){
-                         Navigator.pushNamedAndRemoveUntil(context,'/adminPage', (Route <dynamic> route) => false);
-                       }
-                     else if(role == 'User')Navigator.pushNamedAndRemoveUntil(context,'/homepage', (Route <dynamic> route) => false);
-                     else print('unauthorized access');
+                         checkUserRole();
+
                   }
                 } catch (e) {
                   print(e);
