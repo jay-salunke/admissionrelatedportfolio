@@ -16,30 +16,25 @@ class _LoginState extends State<Login> {
   String _emailId = "";
   String _password = "";
 
-  Future<void> checkUserRole() async {
+  void checkUserRole() {
     if (FirebaseAuth.instance.currentUser != null) {
       String uid = FirebaseAuth.instance.currentUser!.uid.toString();
       final userRef = FirebaseFirestore.instance.collection("UsersDetails");
-      userRef.where('uid', isEqualTo: uid).get().then(
-              (QuerySnapshot value) {
-            final element = value.docs[0];
-            if (element.exists) {
-              if ((element.data() as Map<String, dynamic>)['Role'] ==
-                  'Admin') {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/adminPage', (Route<dynamic> route) => false);
-              }
-              else if ((element.data() as Map<String, dynamic>)['Role'] ==
-                  'User') {
-                print("User");
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/homepage', (Route<dynamic> route) => false);
-              }
-            }
-           
-          });
-
-    }else{
+      userRef.where('uid', isEqualTo: uid).get().then((QuerySnapshot value) {
+        final element = value.docs[0];
+        if (element.exists) {
+          if ((element.data() as Map<String, dynamic>)['Role'] == 'Admin') {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/adminPage', (Route<dynamic> route) => false);
+          } else if ((element.data() as Map<String, dynamic>)['Role'] ==
+              'User') {
+            print("User");
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/homepage', (Route<dynamic> route) => false);
+          }
+        }
+      });
+    } else {
       Login();
     }
   }
@@ -48,7 +43,7 @@ class _LoginState extends State<Login> {
 
   bool _validateEmail(String email) {
     RegExp regexemail =
-    RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
+        RegExp("^([a-z\\d\\.-]+)@somaiya\\.edu", caseSensitive: true);
     if (regexemail.hasMatch(email))
       return true;
     else
@@ -64,6 +59,7 @@ class _LoginState extends State<Login> {
       print('Unsuccessful');
     return false;
   }
+
   @override
   Widget build(BuildContext context) {
     const mainColor = 0xFF910222;
