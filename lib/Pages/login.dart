@@ -1,10 +1,8 @@
-
 import 'package:admission_portfolio/Pages/signUp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -19,18 +17,31 @@ class _LoginState extends State<Login> {
   String _password = "";
 
   Future<void> checkUserRole() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
-    final userRef = FirebaseFirestore.instance.collection("UsersDetails");
-    await userRef.where('uid',isEqualTo: uid).get().then((
-        QuerySnapshot value) => value.docs.forEach((DocumentSnapshot element) {
-          if((element.data() as Map<String,dynamic>)['Role'] == 'Admin'){
-            Navigator.pushNamedAndRemoveUntil(context,'/adminPage', (Route<dynamic>route) => false);
-          }else if((element.data() as Map<String,dynamic>)['Role'] == 'User'){
-            Navigator.pushNamedAndRemoveUntil(context,'/homepage', (Route<dynamic>route) => false);
-          }
-          else Navigator.pushNamedAndRemoveUntil(context,'/login', (Route<dynamic>route) => false);
-    }));
+    if (FirebaseAuth.instance.currentUser != null) {
+      String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+      final userRef = FirebaseFirestore.instance.collection("UsersDetails");
+      userRef.where('uid', isEqualTo: uid).get().then(
+              (QuerySnapshot value) {
+            final element = value.docs[0];
+            if (element.exists) {
+              if ((element.data() as Map<String, dynamic>)['Role'] ==
+                  'Admin') {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/adminPage', (Route<dynamic> route) => false);
+              }
+              else if ((element.data() as Map<String, dynamic>)['Role'] ==
+                  'User') {
+                print("User");
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/homepage', (Route<dynamic> route) => false);
+              }
+            }
+           
+          });
 
+    }else{
+      Login();
+    }
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -53,7 +64,6 @@ class _LoginState extends State<Login> {
       print('Unsuccessful');
     return false;
   }
-
   @override
   Widget build(BuildContext context) {
     const mainColor = 0xFF910222;
@@ -208,8 +218,7 @@ class _LoginState extends State<Login> {
                   if (_validateForm()) {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: _emailId, password: _password);
-                         checkUserRole();
-
+                    checkUserRole();
                   }
                 } catch (e) {
                   print(e);

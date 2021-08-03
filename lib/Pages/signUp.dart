@@ -211,7 +211,7 @@ class _SignupPageState extends State<SignupPage> {
                           'password': _pass,
                           'uid':
                               FirebaseAuth.instance.currentUser!.uid.toString(),
-                          'Role':'User',
+                          'Role': 'User',
                         });
 
                         // Navigator.of(context).push(
@@ -219,7 +219,8 @@ class _SignupPageState extends State<SignupPage> {
                         //     builder: (context) => Login(),
                         //   ),
                         // );
-                        Navigator.pushNamedAndRemoveUntil(context, '/homepage', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/homepage', (route) => false);
                       } on FirebaseAuthException catch (e) {
                         print(e.toString());
                       }
