@@ -44,9 +44,3 @@ class _AuthCheckerState extends State<AuthChecker> {
     return Container();
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   // TODO: implement build
-//   throw UnimplementedError();
-// }

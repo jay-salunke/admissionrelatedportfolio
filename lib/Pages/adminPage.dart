@@ -8,6 +8,7 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  bool uploadSelect = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +29,49 @@ class _AdminPageState extends State<AdminPage> {
 
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              dense: true,
+              trailing: Icon(Icons.add,
+              color: Colors.red,
+                size: 24,
+              ),
+              title: Text('Upload Files',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize:15,
+                color: Theme.of(context).primaryColor,
+              ),
+              ),
+              onTap: (){
+
+                print("Upload");
+              },
+            ),
+            ListTile(
+               dense: true,
+              trailing: Icon(Icons.delete,
+                color: Colors.red,
+                size: 24,
+              ),
+              title: Text('Delete Files',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize:15,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              onTap: (){
+
+                print("Upload");
+              },
+            ),
+          ],
+        ),
+
       ),
       body:Center(
         child: Text(
