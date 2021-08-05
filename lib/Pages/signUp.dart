@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _SignupPageState extends State<SignupPage> {
       print('$_confirmPass');
       return true;
     } else {
-      print("Unsuccessful");
+      print("Not Success");
       return false;
     }
   }
@@ -222,7 +223,35 @@ class _SignupPageState extends State<SignupPage> {
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/homepage', (route) => false);
                       } on FirebaseAuthException catch (e) {
-                        print(e.toString());
+                        print(e.message.toString());
+                        showFlash(
+                          context: context,
+                          duration: const Duration(seconds: 4),
+                          builder: (context, controller) {
+                            return Flash.bar(
+                              controller: controller,
+                              backgroundGradient: LinearGradient(
+                                colors: [Colors.yellow, Colors.amber],
+                              ),
+                              child: FlashBar(
+                                content: Text(
+                                  e.message.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                icon: Icon(Icons.info_outline_rounded),
+                                showProgressIndicator: true,
+                              ),
+                              position: FlashPosition.top,
+                              margin: const EdgeInsets.all(10),
+                              forwardAnimationCurve: Curves.easeInOut,
+                              reverseAnimationCurve: Curves.decelerate,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            );
+                          },
+                        );
                       }
                     }
                   },
