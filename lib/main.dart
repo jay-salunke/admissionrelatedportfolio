@@ -1,3 +1,4 @@
+import 'package:admission_portfolio/Pages/VerifyEmail.dart';
 import 'package:admission_portfolio/Pages/adminPage.dart';
 import 'package:admission_portfolio/Pages/userScreen.dart';
 import 'package:admission_portfolio/Pages/login.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
       '/signUp': (BuildContext context) => SignupPage(),
       '/homepage': (BuildContext context) => HomePage(),
       '/adminPage': (BuildContext context) => AdminPage(),
+      '/verifyEmail':(BuildContext context)=>VerifyEmail(),
     },
   ));
 }

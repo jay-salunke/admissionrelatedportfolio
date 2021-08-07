@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _SignupPageState extends State<SignupPage> {
     else
       return false;
   }
+
 
   bool _validateForm() {
     if (_formKey.currentState!.validate()) {
@@ -199,6 +201,7 @@ class _SignupPageState extends State<SignupPage> {
                   onPressed: () async {
                     if (_validateForm()) {
                       try {
+
                         await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
                                 email: _emailID, password: _pass);
@@ -215,13 +218,11 @@ class _SignupPageState extends State<SignupPage> {
                           'Role': 'User',
                         });
 
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => Login(),
-                        //   ),
-                        // );
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/homepage', (route) => false);
+                            context, '/verifyEmail', (route) => false);
+
+                        // Navigator.pushNamedAndRemoveUntil(
+                        //     context, '/homepage', (route) => false);
                       } on FirebaseAuthException catch (e) {
                         print(e.message.toString());
                         showFlash(
