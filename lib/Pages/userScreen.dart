@@ -1,8 +1,11 @@
+
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+// import 'package:path_provider/path_provider.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,15 +15,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-// String _getNames() {
-//   String getFilenames ="";
-//   final storage = FirebaseStorage.instance.ref();
-//   final ListResult result  = FirebaseStorage.instance.ref().listAll() as ListResult ;
-//   result.items.forEach((element) {
-//        getFilenames = element.toString() ;
-//   });
-//
-// }
+  List<Reference> files = [];
+
+  Future<void> getAllFilesReference() async {
+    files = (await FirebaseStorage.instance.ref().listAll()).items;
+  }
+
+  void downloadFile(int index){
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    Reference file = files[index];
+    File downloadToFile = File('/storage/emulated/0/Download/${file.name}');
+    print(downloadToFile);
+
+    try {
+      file.writeToFile(downloadToFile);
+    } on FirebaseException catch (e) {
+        print(e.message);
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,40 +55,46 @@ class _HomePageState extends State<HomePage> {
         ],
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: 50,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: ListTile(
-                        title: Text(
-                          FirebaseStorage.instance
-                              .ref()
-                              .getDownloadURL()
-                              .toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 20,
-                          ),
-                        ),
-                        dense: true,
-                        trailing: IconButton(
-                          icon: Icon(Icons.download_outlined),
-                          onPressed: () {
-                            print("Download file: " + index.toString());
-                          },
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-          ],
+      body: FutureBuilder(
+          future: getAllFilesReference(),
+           builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if(snapshot.connectionState == ConnectionState.none){
+                print("No Files are there");
+                return Text('No Files are there');
+            }
+
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: files.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            child: ListTile(
+                              title: Text(
+                                files[index].name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              dense: true,
+                              trailing: IconButton(
+                                icon: Icon(Icons.download_outlined),
+                                onPressed: () async {
+                                  downloadFile(index);
+                                },
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              );
+           }
+
         ),
-      ),
     );
   }
 }
