@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Reference> files = [];
 
-  Future<void> getAllFilesReference() async {
+  Future<void> getFileNames() async {
     files = (await FirebaseStorage.instance.ref().listAll()).items;
   }
 
@@ -28,11 +28,11 @@ class _HomePageState extends State<HomePage> {
     print(downloadToFile);
 
     try {
+      
       file.writeToFile(downloadToFile);
     } on FirebaseException catch (e) {
         print(e.message);
     }
-
   }
 
 
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: FutureBuilder(
-          future: getAllFilesReference(),
+          future: getFileNames(),
            builder: (BuildContext context, AsyncSnapshot snapshot) {
             if(snapshot.connectionState == ConnectionState.none){
                 print("No Files are there");

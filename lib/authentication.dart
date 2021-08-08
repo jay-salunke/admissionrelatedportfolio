@@ -1,7 +1,8 @@
-import 'package:admission_portfolio/Pages/login.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'Pages/VerifyEmail.dart';
 
 class AuthChecker extends StatefulWidget {
   const AuthChecker({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _AuthCheckerState extends State<AuthChecker> {
   void initState() {
     super.initState();
 
-    if (FirebaseAuth.instance.currentUser != null) {
+     if (FirebaseAuth.instance.currentUser!=null) {
       String uid = FirebaseAuth.instance.currentUser!.uid.toString();
       final userRef = FirebaseFirestore.instance.collection("UsersDetails");
       userRef.where('uid', isEqualTo: uid).get().then((QuerySnapshot value) {
@@ -35,7 +36,10 @@ class _AuthCheckerState extends State<AuthChecker> {
               context, '/login', (Route<dynamic> route) => false);
       });
     } else {
-      Login();
+      // if (!FirebaseAuth.instance.currentUser!.emailVerified)
+      //   Navigator.pushNamedAndRemoveUntil(
+      //       context, '/verifyEmail', (Route<dynamic> route) => false);
+       VerifyEmail();
     }
   }
 

@@ -19,7 +19,7 @@ Future<void> main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: FirstPage(),
-    initialRoute: FirebaseAuth.instance.currentUser == null
+    initialRoute: FirebaseAuth.instance.currentUser == null //&& FirebaseAuth.instance.currentUser!.emailVerified
         ? '/firstPage'
         : '/authenticate',
     routes: <String, WidgetBuilder>{
@@ -29,7 +29,7 @@ Future<void> main() async {
       '/signUp': (BuildContext context) => SignupPage(),
       '/homepage': (BuildContext context) => HomePage(),
       '/adminPage': (BuildContext context) => AdminPage(),
-      '/verifyEmail':(BuildContext context)=>VerifyEmail(),
+      '/verifyEmail':(BuildContext context)=> VerifyEmail(),
     },
   ));
 }
