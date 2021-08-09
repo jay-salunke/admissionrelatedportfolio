@@ -28,8 +28,11 @@ class _HomePageState extends State<HomePage> {
     print(downloadToFile);
 
     try {
-      
+
       file.writeToFile(downloadToFile);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("${file.name} is downloaded at /storage/emulated/0/Download/"),
+      ));
     } on FirebaseException catch (e) {
         print(e.message);
     }

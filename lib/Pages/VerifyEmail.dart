@@ -56,34 +56,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
         print("Not real user");
       }
     } on FirebaseException catch (e) {
-      showFlash(
-          context: context,
-          duration: const Duration(seconds: 4),
-          builder: (context, controller) {
-            return Flash.bar(
-              controller: controller,
-              backgroundGradient: LinearGradient(
-                colors: [Colors.yellow, Colors.amber],
-              ),
-              child: FlashBar(
-                content: Text(
-                  e.message.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                icon: Icon(Icons.info_outline_rounded),
-                showProgressIndicator: true,
-              ),
-              position: FlashPosition.top,
-              margin: const EdgeInsets.all(10),
-              forwardAnimationCurve: Curves.easeInOut,
-              reverseAnimationCurve: Curves.decelerate,
-              borderRadius:
-              const BorderRadius.all(Radius.circular(5)),
-            );
-          }
-      );
+         print(e.message);
     }
   }
 }

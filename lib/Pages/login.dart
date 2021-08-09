@@ -6,6 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import '../authentication.dart';
+import 'VerifyEmail.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -19,7 +22,8 @@ class _LoginState extends State<Login> {
   String _password = "";
 
   void checkUserRole() {
-    if (FirebaseAuth.instance.currentUser != null) {
+    bool _checkUserVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    if (FirebaseAuth.instance.currentUser != null && _checkUserVerified) {
       String uid = FirebaseAuth.instance.currentUser!.uid.toString();
       final userRef = FirebaseFirestore.instance.collection("UsersDetails");
       userRef.where('uid', isEqualTo: uid).get().then((QuerySnapshot value) {
@@ -37,7 +41,9 @@ class _LoginState extends State<Login> {
         }
       });
     } else {
-      Login();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please verify the email first'),
+      ));
     }
   }
 
@@ -214,6 +220,7 @@ class _LoginState extends State<Login> {
                   if (_validateForm()) {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: _emailId, password: _password);
+                    //checkUserRole();
                     checkUserRole();
                   }
                 } on FirebaseAuthException catch (e) {
