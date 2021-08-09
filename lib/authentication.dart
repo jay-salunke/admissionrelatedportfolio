@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'Pages/firstPage.dart';
 import 'Pages/login.dart';
 import 'Pages/homePage.dart';
 import 'Pages/adminPage.dart';
@@ -15,7 +16,7 @@ class AuthChecker extends StatefulWidget {
 }
 
 class _AuthCheckerState extends State<AuthChecker> {
-  late var page;
+  var page;
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _AuthCheckerState extends State<AuthChecker> {
       case "VerifyEmail":
         return VerifyEmail();
       default:
-        return Login();
+        return FirstPage();
     }
   }
 }
