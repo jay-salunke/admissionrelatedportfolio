@@ -1,6 +1,6 @@
-import 'package:admission_portfolio/Pages/VerifyEmail.dart';
+import 'package:admission_portfolio/Pages/verifyEmail.dart';
 import 'package:admission_portfolio/Pages/adminPage.dart';
-import 'package:admission_portfolio/Pages/userScreen.dart';
+import 'package:admission_portfolio/Pages/homePage.dart';
 import 'package:admission_portfolio/Pages/login.dart';
 import 'package:admission_portfolio/Pages/signUp.dart';
 import 'package:admission_portfolio/authentication.dart';
@@ -19,7 +19,7 @@ Future<void> main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: FirstPage(),
-    initialRoute: FirebaseAuth.instance.currentUser == null //&& FirebaseAuth.instance.currentUser!.emailVerified
+    initialRoute: FirebaseAuth.instance.currentUser == null
         ? '/firstPage'
         : '/authenticate',
     routes: <String, WidgetBuilder>{

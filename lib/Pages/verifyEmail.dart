@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -16,18 +15,16 @@ class _VerifyEmailState extends State<VerifyEmail> {
   late User user;
   late Timer timer;
 
-
-  @override void initState() {
+  @override
+  void initState() {
+    super.initState();
     user = auth.currentUser!;
     user.sendEmailVerification();
 
     Timer.periodic(Duration(seconds: 3), (timer) {
       checkEmailVerified();
     });
-
-    super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +34,15 @@ class _VerifyEmailState extends State<VerifyEmail> {
         centerTitle: true,
       ),
       body: Center(
-        child: Text(
-            'An email has been sent to ${user.email} please verify '
-        ),
+        child: Text('An email has been sent to ${user.email} please verify '),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   Future<void> checkEmailVerified() async {
@@ -49,14 +50,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
       user = auth.currentUser!;
       await user.reload();
       if (user.emailVerified) {
-        timer.cancel();
         Navigator.pushNamedAndRemoveUntil(
-            context, 'authenticate', (route) => false);
-      }else{
-        print("Not real user");
+            context, '/authenticate', (route) => false);
       }
     } on FirebaseException catch (e) {
-         print(e.message);
+      print(e.message);
     }
   }
 }

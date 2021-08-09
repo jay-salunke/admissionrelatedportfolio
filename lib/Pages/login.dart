@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import '../authentication.dart';
-import 'VerifyEmail.dart';
+import 'verifyEmail.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
