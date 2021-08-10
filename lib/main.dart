@@ -14,7 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-  );
+      );
   await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -29,7 +29,7 @@ Future<void> main() async {
       '/signUp': (BuildContext context) => SignupPage(),
       '/homepage': (BuildContext context) => HomePage(),
       '/adminPage': (BuildContext context) => AdminPage(),
-      '/verifyEmail':(BuildContext context)=> VerifyEmail(),
+      '/verifyEmail': (BuildContext context) => VerifyEmail(),
     },
   ));
 }
