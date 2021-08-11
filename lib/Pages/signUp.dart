@@ -213,7 +213,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
                   child: TextFormField(
                     obscureText: _isVisible,
                     keyboardType: TextInputType.text,
@@ -257,7 +257,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 16,
+                  height: 10,
                 ),
                 RoundedLoadingButton(
                     color: Color(mainColor),
