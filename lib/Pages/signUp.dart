@@ -329,6 +329,10 @@ class _SignupPageState extends State<SignupPage> {
                             },
                           );
                         }
+                      } else {
+                        Timer(Duration(seconds: 1), () {
+                          _btnController.error();
+                        });
                       }
                       Future.delayed(const Duration(milliseconds: 3000), () {
                         setState(() {
