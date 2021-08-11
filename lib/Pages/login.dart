@@ -20,9 +20,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   final RoundedLoadingButtonController _btnController =
-  RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
 
   bool _isVisible = true;
   String _emailId = "";
@@ -195,47 +194,11 @@ class _LoginState extends State<Login> {
                 onChanged: (value) => _password = value,
               ),
             ),
+            // SizedBox(
+            //   height: 15,
+            // ),
             SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: InkWell(
-                    child: Text(
-                      "Sign in",
-                      style: TextStyle(
-                        color: Colors.amber[700],
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SignupPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                InkWell(
-                  child: Text(
-                    'Forgot Password',
-                    style: TextStyle(
-                      color: Colors.amber[700],
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
+              height: 10,
             ),
             RoundedLoadingButton(
               color: Color(mainColor),
@@ -301,6 +264,18 @@ class _LoginState extends State<Login> {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 90),
+              child: Row(
+                children: <Widget>[
+                  Text("Don't have an Account?"),
+                  GestureDetector(child: Text('SignUp'), onTap: () {}),
+                ],
               ),
             ),
           ],
