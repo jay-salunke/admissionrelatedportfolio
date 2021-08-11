@@ -8,6 +8,7 @@ class FirstPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const mainColor = 0xFF910222;
     return Scaffold(
       body: Center(
         child: Column(
@@ -24,7 +25,7 @@ class FirstPage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                primary: Color(mainColor),
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -59,7 +60,7 @@ class FirstPage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                primary: Color(mainColor),
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30)),
