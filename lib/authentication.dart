@@ -49,6 +49,7 @@ class _AuthCheckerState extends State<AuthChecker> {
         return Login();
       case "HomePage":
         return HomePage();
+
       case "AdminPage":
         return AdminPage();
       case "VerifyEmail":

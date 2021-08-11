@@ -1,13 +1,16 @@
+import 'dart:async';
+
 import 'package:admission_portfolio/Pages/signUp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'dart:ui';
 
-import '../authentication.dart';
-import 'verifyEmail.dart';
+// import '../authentication.dart';
+// import 'verifyEmail.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,6 +20,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  final RoundedLoadingButtonController _btnController =
+  RoundedLoadingButtonController();
+
   bool _isVisible = true;
   String _emailId = "";
   String _password = "";
@@ -30,20 +37,39 @@ class _LoginState extends State<Login> {
         final element = value.docs[0];
         if (element.exists) {
           if ((element.data() as Map<String, dynamic>)['Role'] == 'Admin') {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/adminPage', (Route<dynamic> route) => false);
+            Timer(Duration(seconds: 1), () {
+              _btnController.success();
+            });
+
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/adminPage', (Route<dynamic> route) => false);
+            });
           } else if ((element.data() as Map<String, dynamic>)['Role'] ==
               'User') {
-            print("User");
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/homepage', (Route<dynamic> route) => false);
+            Timer(Duration(seconds: 1), () {
+              _btnController.success();
+            });
+
+            Future.delayed(const Duration(milliseconds: 3000), () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/homepage', (Route<dynamic> route) => false);
+            });
           }
         }
       });
     } else {
+      Timer(Duration(seconds: 1), () {
+        _btnController.error();
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Please verify the email first'),
       ));
+
+      Future.delayed(const Duration(milliseconds: 3000), () {
+        _btnController.reset();
+      });
     }
   }
 
@@ -211,19 +237,27 @@ class _LoginState extends State<Login> {
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-              ),
+            RoundedLoadingButton(
+              color: Color(mainColor),
               onPressed: () async {
                 try {
                   if (_validateForm()) {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: _emailId, password: _password);
-                    //checkUserRole();
+
                     checkUserRole();
+                  } else {
+                    _btnController.error();
+
+                    Future.delayed(const Duration(milliseconds: 3000), () {
+                      _btnController.reset();
+                    });
                   }
                 } on FirebaseAuthException catch (e) {
+                  Timer(Duration(seconds: 1), () {
+                    _btnController.error();
+                  });
+
                   print(e.message.toString());
                   showFlash(
                     context: context,
@@ -253,12 +287,19 @@ class _LoginState extends State<Login> {
                       );
                     },
                   );
+                  Future.delayed(const Duration(milliseconds: 3000), () {
+                    setState(() {
+                      _btnController.reset();
+                    });
+                  });
                 }
               },
+              controller: _btnController,
               child: Text(
-                "Login",
+                'Login',
                 style: TextStyle(
-                  fontSize: 21.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

@@ -6,14 +6,12 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-
 class SignupPage extends StatefulWidget {
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   String _name = "";
   String _emailID = "";
   String _pass = "";
@@ -231,14 +229,12 @@ class _SignupPageState extends State<SignupPage> {
 
                           Timer(Duration(seconds: 1), () {
                             _btnController.success();
-
                           });
-                          Future.delayed(const Duration(milliseconds: 3000), () {
+                          Future.delayed(const Duration(milliseconds: 3000),
+                              () {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/verifyEmail', (route) => false);
                           });
-
-
                         } on FirebaseAuthException catch (e) {
                           Timer(Duration(seconds: 1), () {
                             _btnController.error();
@@ -269,20 +265,18 @@ class _SignupPageState extends State<SignupPage> {
                                 margin: const EdgeInsets.all(10),
                                 forwardAnimationCurve: Curves.easeInOut,
                                 reverseAnimationCurve: Curves.decelerate,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(5)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5)),
                               );
                             },
                           );
                         }
                       }
                       Future.delayed(const Duration(milliseconds: 3000), () {
-                            setState(() {
-                              _btnController.reset();
-                            });
-
+                        setState(() {
+                          _btnController.reset();
+                        });
                       });
-
                     }),
               ],
             ),
