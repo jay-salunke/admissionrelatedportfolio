@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:admission_portfolio/Pages/resetPasswordPage.dart';
 import 'package:admission_portfolio/Pages/signUp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -217,6 +218,16 @@ class _LoginState extends State<Login> {
               // SizedBox(
               //   height: 15,
               // ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ResetPasswordPage()),
+                  );
+                },
+                child: Text('Forgot Password ?'),
+              ),
               SizedBox(
                 height: 10,
               ),
