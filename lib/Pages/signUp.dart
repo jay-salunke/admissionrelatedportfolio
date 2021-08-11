@@ -16,6 +16,7 @@ class _SignupPageState extends State<SignupPage> {
   String _emailID = "";
   String _pass = "";
   String _confirmPass = "";
+  bool _isVisible = true;
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
   final RoundedLoadingButtonController _btnController =
@@ -169,6 +170,7 @@ class _SignupPageState extends State<SignupPage> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
+                    obscureText: _isVisible,
                     controller: _password,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -181,7 +183,11 @@ class _SignupPageState extends State<SignupPage> {
                           Icons.visibility_off_outlined,
                           color: Color(mainColor),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _isVisible = !_isVisible;
+                          });
+                        },
                       ),
                       border: OutlineInputBorder(),
                       focusedBorder: OutlineInputBorder(
@@ -209,6 +215,7 @@ class _SignupPageState extends State<SignupPage> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextFormField(
+                    obscureText: _isVisible,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
@@ -220,7 +227,11 @@ class _SignupPageState extends State<SignupPage> {
                           Icons.visibility_off_outlined,
                           color: Color(mainColor),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _isVisible = !_isVisible;
+                          });
+                        },
                       ),
                       border: OutlineInputBorder(),
                       focusedBorder: OutlineInputBorder(

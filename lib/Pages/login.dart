@@ -115,7 +115,9 @@ class _LoginState extends State<Login> {
             Text(
               "Login Form",
               style: TextStyle(
+                color: Color(mainColor),
                 fontSize: 30.0,
+                fontWeight: FontWeight.bold,
                 letterSpacing: 1.0,
               ),
             ),
@@ -131,14 +133,23 @@ class _LoginState extends State<Login> {
                 cursorColor: Colors.red,
                 decoration: InputDecoration(
                   fillColor: Colors.green,
-                  suffixIcon: Icon(Icons.mail_outline_outlined),
+                  suffixIcon: Icon(
+                    Icons.mail_outline_outlined,
+                    color: Color(mainColor),
+                  ),
                   labelText: 'Email ID',
                   labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: Color(mainColor),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(mainColor), width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(mainColor),
+                      width: 2.0,
                     ),
                   ),
                 ),
@@ -165,6 +176,7 @@ class _LoginState extends State<Login> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.visibility_off_outlined,
+                      color: Color(mainColor),
                     ),
                     onPressed: () {
                       setState(() {
@@ -175,10 +187,16 @@ class _LoginState extends State<Login> {
                   labelText: 'Password',
                   labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: Color(mainColor),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(mainColor), width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(mainColor),
+                      width: 2.0,
                     ),
                   ),
                 ),
