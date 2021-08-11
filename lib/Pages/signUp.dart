@@ -87,8 +87,9 @@ class _SignupPageState extends State<SignupPage> {
                 Text(
                   'Signup Form',
                   style: TextStyle(
-                    color: Colors.black87,
+                    color: Color(mainColor),
                     fontSize: 30,
+                    fontWeight: FontWeight.bold,
                     letterSpacing: 1.0,
                   ),
                 ),
@@ -98,12 +99,24 @@ class _SignupPageState extends State<SignupPage> {
                   child: TextFormField(
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      labelText: 'Name',
-                      suffixIcon: Icon(Icons.person_add_alt),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(mainColor), width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(mainColor),
+                          width: 2.0,
                         ),
+                      ),
+                      labelText: 'Name',
+                      labelStyle: TextStyle(
+                        color: Color(mainColor),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.person_add_alt,
+                        color: Color(mainColor),
                       ),
                     ),
                     validator: (value) {
@@ -123,10 +136,22 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email ID',
-                      suffixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                      labelStyle: TextStyle(
+                        color: Color(mainColor),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.email,
+                        color: Color(mainColor),
+                      ),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(mainColor), width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(mainColor),
+                          width: 2.0,
                         ),
                       ),
                     ),
@@ -148,15 +173,25 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Password',
+                      labelStyle: TextStyle(
+                        color: Color(mainColor),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           Icons.visibility_off_outlined,
+                          color: Color(mainColor),
                         ),
                         onPressed: () {},
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(mainColor), width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(mainColor),
+                          width: 2.0,
                         ),
                       ),
                     ),
@@ -177,15 +212,25 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
+                      labelStyle: TextStyle(
+                        color: Color(mainColor),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           Icons.visibility_off_outlined,
+                          color: Color(mainColor),
                         ),
                         onPressed: () {},
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(mainColor), width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(mainColor),
+                          width: 2.0,
                         ),
                       ),
                     ),
@@ -205,8 +250,10 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 RoundedLoadingButton(
                     color: Color(mainColor),
-                    child:
-                        Text('SignUp', style: TextStyle(color: Colors.amber,)),
+                    child: Text('SignUp',
+                        style: TextStyle(
+                          color: Colors.amber,
+                        )),
                     controller: _btnController,
                     onPressed: () async {
                       if (_validateForm()) {
