@@ -206,7 +206,7 @@ class _SignupPageState extends State<SignupPage> {
                 RoundedLoadingButton(
                     color: Color(mainColor),
                     child:
-                        Text('SignUp', style: TextStyle(color: Colors.white)),
+                        Text('SignUp', style: TextStyle(color: Colors.amber,)),
                     controller: _btnController,
                     onPressed: () async {
                       if (_validateForm()) {
