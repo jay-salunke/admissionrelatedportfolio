@@ -34,8 +34,9 @@ dependencies:
   permission_handler: ^8.1.4+2
   flutter_downloader: ^1.6.1
   dio: ^4.0.0
-  ext_storage: ^1.0.3
   rounded_loading_button: ^2.0.3
+
+
 
 
 
@@ -47,6 +48,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flash: ^2.0.1
   fluttertoast: ^8.0.8
+  ext_storage: ^1.0.3
 
 
 

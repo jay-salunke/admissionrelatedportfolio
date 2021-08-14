@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,9 +20,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> getFileNames() async {
     files = (await FirebaseStorage.instance.ref().listAll()).items;
   }
-
+  //
   // void downloadFile(int index){
-  //   // Directory appDocDir = await getApplicationDocumentsDirectory();
   //   Reference file = files[index];
   //   File downloadToFile = File('/storage/emulated/0/Download/${file.name}');
   //   print(downloadToFile);
@@ -33,38 +33,64 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
+
   void downloadFile(int index) async {
-    final ref = FirebaseStorage.instance.ref().child(
-        '${files[index].name.toString()}');
-    final getUrl = ref.getDownloadURL().toString();
-    int num = 0;
-    int tempNum = 0;
-
-    final regex = RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
-
-    File file = new File('/storage/emulated/0/Download/${files[index].name}');
-    String fileName = basenameWithoutExtension(file.path);
-    if (await file.exists()) {
-      print(fileName);
-
-      for (int i = 0; i < fileName.length; i++) {
-        try {
-          if (regex.hasMatch(fileName[i]))
-            num = num * 10 + int.parse(fileName[i]);
-        } on FormatException catch (e) {
-          print(e);
+      final status = Permission.storage.request();
+      if(await status.isGranted) {
+        Reference ref = files[index];
+        String fileName = basenameWithoutExtension(files[index].name);
+        File filePath = new File(
+            'storage/emulated/0/Download/${files[index].name}');
+        if (await filePath.exists()) {
+          int counter = 1;
+          while(await filePath.exists()) {
+            String newFile = fileName + " ($counter)";
+            filePath = File(
+                'storage/emulated/0/Download/${files[index].name.replaceAll(
+                    fileName, newFile)}');
+            ++counter;
+          }
+          ref.writeToFile(filePath);
+        } else {
+          ref.writeToFile(filePath);
         }
+      }else{
+        print("File access is denied");
       }
-      tempNum = num;
-      num++;
-      String newFileName =
-      files[index].name.replaceAll(tempNum.toString(), num.toString());
-      print(newFileName);
-      File newFile = File('storage/emulated/0/Download/$newFileName');
-      Reference reference = files[index];
-      reference.writeToFile(newFile);
-    }
   }
+
+  // void downloadFile(int index) async {
+  //   final ref = FirebaseStorage.instance.ref().child(
+  //       '${files[index].name}');
+  //   final getUrl = ref.getDownloadURL();
+  //   int num = 0;
+  //   int tempNum = 0;
+  //
+  //   final regex = RegExp('\d');
+  //
+  //   File file = new File('/storage/emulated/0/Download/${files[index].name}');
+  //   String fileName = basenameWithoutExtension(file.path);
+  //   if (await file.exists()) {
+  //     print(fileName);
+  //
+  //     for (int i = 0; i < fileName.length; i++) {
+  //       try {
+  //         if (regex.hasMatch(fileName[i]))
+  //           num = num * 10 + int.parse(fileName[i]);
+  //       } on FormatException catch (e) {
+  //         print(e);
+  //       }
+  //     }
+  //     tempNum = num;
+  //     num++;
+  //     String newFileName =
+  //     files[index].name.replaceAll(tempNum.toString(), num.toString());
+  //     print(newFileName);
+  //     File newFile = File('storage/emulated/0/Download/$newFileName');
+  //     Reference reference = files[index];
+  //     reference.writeToFile(newFile);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

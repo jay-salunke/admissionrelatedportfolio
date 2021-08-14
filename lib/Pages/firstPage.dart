@@ -41,7 +41,7 @@ class FirstPage extends StatelessWidget {
                 child: Text(
                   "Login",
                   style: TextStyle(
-                    color: Colors.amber[700],
+                    color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -76,7 +76,7 @@ class FirstPage extends StatelessWidget {
                 child: Text(
                   "Signup",
                   style: TextStyle(
-                    color: Colors.amber[700],
+                    color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
