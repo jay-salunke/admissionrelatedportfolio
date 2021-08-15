@@ -1,10 +1,13 @@
 import 'dart:io';
 
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,22 +24,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void downloadFile(int index) async {
-    final status = Permission.storage.request();
-    if (await status.isGranted) {
       Reference ref = files[index];
       String fileName = basenameWithoutExtension(files[index].name);
       File filePath =
           new File('storage/emulated/0/Download/${files[index].name}');
       if (await filePath.exists()) {
         int counter = 1;
+        String newFile = "";
         while (await filePath.exists()) {
-          String newFile = fileName + " ($counter)";
+          newFile = fileName + " ($counter)";
           filePath = File(
               'storage/emulated/0/Download/${files[index].name.replaceAll(fileName, newFile)}');
           ++counter;
         }
         try {
-          ref.writeToFile(filePath);
+           ref.writeToFile(filePath);
+
         } on FirebaseException catch (e) {
           print("Hello1" + e.message.toString());
         }
@@ -47,9 +50,7 @@ class _HomePageState extends State<HomePage> {
           print("Hello2" + ex.message.toString());
         }
       }
-    } else {
-      print("File access is denied");
-    }
+
   }
 
   @override
@@ -99,7 +100,44 @@ class _HomePageState extends State<HomePage> {
                             trailing: IconButton(
                               icon: Icon(Icons.download_outlined),
                               onPressed: () async {
-                                downloadFile(index);
+                                final status = Permission.storage.request();
+                                if(await status.isGranted) {
+                                  downloadFile(index);
+                                  showFlash(
+                                    context: context,
+                                    duration: const Duration(seconds: 4),
+                                    builder: (context, controller) {
+                                      return Flash.bar(
+                                        controller: controller,
+                                        backgroundGradient: LinearGradient(
+                                          colors: [Colors.yellow, Colors.amber],
+                                        ),
+                                        child: FlashBar(
+                                          content: Text(
+                                            '${files[index].name} is downloaded successfully',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          icon: Icon(Icons.info_outline_rounded),
+                                          showProgressIndicator: true,
+                                        ),
+                                        position: FlashPosition.top,
+                                        margin: const EdgeInsets.all(10),
+                                        forwardAnimationCurve: Curves.easeInOut,
+                                        reverseAnimationCurve: Curves.decelerate,
+                                        borderRadius:
+                                        const BorderRadius.all(Radius.circular(5)),
+                                      );
+                                    },
+                                  );
+                                }else{
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Allow the permissions to download files'),
+                                    ),
+                                  );
+                                }
                               },
                             ),
                           ),
