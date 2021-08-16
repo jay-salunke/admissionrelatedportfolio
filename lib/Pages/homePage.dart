@@ -117,7 +117,9 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                           icon:
-                                              Icon(Icons.info_outline_rounded),
+                                              Icon(Icons.check_circle_outline_rounded,
+                                               color: Colors.green,
+                                              ),
                                           showProgressIndicator: true,
                                         ),
                                         position: FlashPosition.top,
