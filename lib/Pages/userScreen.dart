@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -22,33 +21,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   void downloadFile(int index) async {
-      Reference ref = files[index];
-      String fileName = basenameWithoutExtension(files[index].name);
-      File filePath =
-          new File('storage/emulated/0/Download/${files[index].name}');
-      if (await filePath.exists()) {
-        int counter = 1;
-        String newFile = "";
-        while (await filePath.exists()) {
-          newFile = fileName + " ($counter)";
-          filePath = File(
-              'storage/emulated/0/Download/${files[index].name.replaceAll(fileName, newFile)}');
-          ++counter;
-        }
-        try {
-           ref.writeToFile(filePath);
-
-        } on FirebaseException catch (e) {
-          print("Hello1" + e.message.toString());
-        }
-      } else {
-        try {
-          ref.writeToFile(filePath);
-        } on FirebaseException catch (ex) {
-          print("Hello2" + ex.message.toString());
-        }
+    Reference ref = files[index];
+    String fileName = basenameWithoutExtension(files[index].name);
+    File filePath =
+        new File('storage/emulated/0/Download/${files[index].name}');
+    if (await filePath.exists()) {
+      int counter = 1;
+      String newFile = "";
+      while (await filePath.exists()) {
+        newFile = fileName + " ($counter)";
+        filePath = File(
+            'storage/emulated/0/Download/${files[index].name.replaceAll(fileName, newFile)}');
+        ++counter;
       }
-
+      try {
+        ref.writeToFile(filePath);
+      } on FirebaseException catch (e) {
+        print("Hello1" + e.message.toString());
+      }
+    } else {
+      try {
+        ref.writeToFile(filePath);
+      } on FirebaseException catch (ex) {
+        print("Hello2" + ex.message.toString());
+      }
+    }
   }
 
   @override
@@ -101,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                               icon: Icon(Icons.download_outlined),
                               onPressed: () async {
                                 final status = Permission.storage.request();
-                                if(await status.isGranted) {
+                                if (await status.isGranted) {
                                   downloadFile(index);
                                   showFlash(
                                     context: context,
@@ -119,22 +116,25 @@ class _HomePageState extends State<HomePage> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          icon: Icon(Icons.info_outline_rounded),
+                                          icon:
+                                              Icon(Icons.info_outline_rounded),
                                           showProgressIndicator: true,
                                         ),
                                         position: FlashPosition.top,
                                         margin: const EdgeInsets.all(10),
                                         forwardAnimationCurve: Curves.easeInOut,
-                                        reverseAnimationCurve: Curves.decelerate,
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(5)),
+                                        reverseAnimationCurve:
+                                            Curves.decelerate,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(5)),
                                       );
                                     },
                                   );
-                                }else{
+                                } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Allow the permissions to download files'),
+                                      content: Text(
+                                          'Allow the permissions to download files'),
                                     ),
                                   );
                                 }
