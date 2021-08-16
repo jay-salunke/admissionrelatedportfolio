@@ -47,11 +47,12 @@ dependencies:
   flash: ^2.0.1
   fluttertoast: ^8.0.8
   flutter_launcher_icons: ^0.9.1
+  get: ^4.3.8
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "College_Logo/Kj_Somaiya_Logo.png"
+  image_path: "College_Logo/College_Logo_(1).png"
 
 
 

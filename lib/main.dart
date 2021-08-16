@@ -15,10 +15,9 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    //home: FirstPage(),
-    initialRoute: FirebaseAuth.instance.currentUser == null
-        ? '/firstPage'
-        : '/authenticate',
+    initialRoute: FirebaseAuth.instance.currentUser != null
+        ? '/authenticate'
+        : '/firstPage',
     routes: <String, WidgetBuilder>{
       '/authenticate': (BuildContext context) => AuthChecker(),
       '/firstPage': (BuildContext context) => FirstPage(),
