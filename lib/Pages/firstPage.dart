@@ -34,7 +34,7 @@ class FirstPage extends StatelessWidget {
               ),
               icon: Icon(
                 Icons.login_outlined,
-                color: Colors.amber[700],
+                color: Colors.white,
               ),
               label: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -69,7 +69,7 @@ class FirstPage extends StatelessWidget {
               ),
               icon: Icon(
                 Icons.person_add_alt_1_outlined,
-                color: Colors.amber[700],
+                color: Colors.white,
               ),
               label: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),

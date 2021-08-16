@@ -262,7 +262,7 @@ class _SignupPageState extends State<SignupPage> {
                     color: Color(mainColor),
                     child: Text('SignUp',
                         style: TextStyle(
-                          color: Colors.amber,
+                          color: Colors.white,
                         )),
                     controller: _btnController,
                     onPressed: () async {
