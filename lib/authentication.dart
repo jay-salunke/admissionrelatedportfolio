@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Pages/firstPage.dart';
 import 'Pages/login.dart';
-import 'Pages/userScreen.dart';
+import 'Pages/homePage.dart';
 import 'Pages/adminPage.dart';
 import 'Pages/verifyEmail.dart';
 
@@ -21,7 +21,6 @@ class _AuthCheckerState extends State<AuthChecker> {
   void initState() {
     super.initState();
     bool _checkEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
     if (_checkEmailVerified) {
       final userRef = FirebaseFirestore.instance.collection("UsersDetails");
       userRef
@@ -48,7 +47,6 @@ class _AuthCheckerState extends State<AuthChecker> {
         return Login();
       case "HomePage":
         return HomePage();
-
       case "AdminPage":
         return AdminPage();
       case "VerifyEmail":
