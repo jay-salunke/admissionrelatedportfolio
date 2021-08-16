@@ -55,8 +55,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const mainColor = 0xFF910222;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(mainColor),
         title: Text('Download Files'),
         automaticallyImplyLeading: false,
         actions: <Widget>[
