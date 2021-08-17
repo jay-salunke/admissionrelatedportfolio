@@ -48,11 +48,20 @@ dependencies:
   fluttertoast: ^8.0.8
   flutter_launcher_icons: ^0.9.1
   get: ^4.3.8
+  flutter_native_splash: ^1.2.1
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "College_Logo/College_Logo_(1).png"
+  image_path: "College_Logo/Logo-Somaiya-Vidyavihar.jpg"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: lib/somaiya-logo.png
+  android: true
+  ios: true
+
+
 
 
 

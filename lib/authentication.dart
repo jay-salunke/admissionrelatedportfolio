@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class AuthChecker extends StatefulWidget {
   const AuthChecker({Key? key}) : super(key: key);
 
@@ -30,7 +29,7 @@ class _AuthCheckerState extends State<AuthChecker> {
               (element.exists)
               ? ((element.data() as Map<String, dynamic>)['Role'] == "Admin")
               ? Navigator.pushNamedAndRemoveUntil(context, '/adminPage', (route) => false)
-              :  Navigator.pushNamedAndRemoveUntil(context, '/homepage', (route) => false)
+              : Navigator.pushNamedAndRemoveUntil(context, '/homepage', (route) => false)
               : Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         });
       } else {

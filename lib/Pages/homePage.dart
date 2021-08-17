@@ -22,13 +22,13 @@ class _HomePageState extends State<HomePage> {
 
   void downloadFile(int index) async {
     Reference ref = files[index];
-    String fileName = basenameWithoutExtension(files[index].name);
+    String fileName = basenameWithoutExtension(files[index].name); // myfile
     File filePath =
         new File('storage/emulated/0/Download/${files[index].name}');
     if (await filePath.exists()) {
       int counter = 1;
       String newFile = "";
-      while (await filePath.exists()) {
+      while (await filePath.exists()) { // my file.docx
         newFile = fileName + " ($counter)";
         filePath = File(
             'storage/emulated/0/Download/${files[index].name.replaceAll(fileName, newFile)}');
