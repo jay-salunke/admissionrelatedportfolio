@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:admission_portfolio/loadingPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
@@ -75,6 +76,9 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.connectionState == ConnectionState.none) {
               print("No Files are there");
               return Text('No Files are there');
+            }
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return LoaderPage();
             }
 
             return Column(
