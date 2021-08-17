@@ -16,7 +16,7 @@ class FirstPage extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               "lib/university-logo.png",
-              width: 350,
+              width: 320,
               fit: BoxFit.cover,
               alignment: Alignment.center,
             ),
