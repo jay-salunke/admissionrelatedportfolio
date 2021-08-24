@@ -278,7 +278,6 @@ class _SignupPageState extends State<SignupPage> {
                           usersData.add({
                             'Name': _name,
                             'EmailId': _emailID,
-                            'password': _pass,
                             'uid': FirebaseAuth.instance.currentUser!.uid
                                 .toString(),
                             'Role': 'User',

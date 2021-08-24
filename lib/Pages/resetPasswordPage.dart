@@ -122,7 +122,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       ),
                       child: FlashBar(
                         content: Text(
-                          'Dear User we have sent you an email on $_emailID to reset the password kindly check your inbox',
+                          'we sent you an email on $_emailID to reset the password kindly check your inbox',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
