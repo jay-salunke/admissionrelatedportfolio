@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
@@ -24,45 +25,66 @@ class _AdminPageState extends State<AdminPage> {
     return task;
   }
 
-  Future getMultipleFiles() async {
-    try {
-      FilePickerResult? result =
-          await FilePicker.platform.pickFiles(allowMultiple: true);
-
-      if (result != null) {
-        selectedFiles.clear();
-        result.files.forEach((selectedFile) {
-          File file = new File(selectedFile.path.toString());
-          selectedFiles.add(file);
-          selectedFiles.forEach((file) {
-            uploadFileToStorage(file);
-          });
-        });
-      } else {
-        print("Selection is cancelled");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    const mainColor = 0xFF910222;
+    Future getMultipleFiles() async {
+      try {
+        FilePickerResult? result =
+            await FilePicker.platform.pickFiles(allowMultiple: true);
+
+        if (result != null) {
+          selectedFiles.clear();
+          result.files.forEach((selectedFile) {
+            File file = new File(selectedFile.path.toString());
+            selectedFiles.add(file);
+            selectedFiles.forEach((file) {
+              uploadFileToStorage(file);
+              showFlash(
+                duration: const Duration(seconds: 4),
+                builder: (context, controller) {
+                  return Flash.bar(
+                    controller: controller,
+                    backgroundGradient: LinearGradient(
+                      colors: [Colors.yellow, Colors.amber],
+                    ),
+                    child: FlashBar(
+                      content: Text(
+                        '$fileName is uploaded successfully',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.green,
+                      ),
+                      showProgressIndicator: true,
+                    ),
+                    position: FlashPosition.top,
+                    margin: const EdgeInsets.all(10),
+                    forwardAnimationCurve: Curves.easeInOut,
+                    reverseAnimationCurve: Curves.decelerate,
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  );
+                },
+                context: context,
+              );
+            });
+          });
+        } else {
+          print("Selection is cancelled");
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('AdminPage'),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            tooltip: 'Logout',
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login', (Route<dynamic> route) => false);
-            },
-            icon: Icon(Icons.logout_outlined),
-          ),
-        ],
+        backgroundColor: Color(mainColor),
       ),
       drawer: Drawer(
         child: ListView(
@@ -76,7 +98,7 @@ class _AdminPageState extends State<AdminPage> {
                   size: 25,
                 ),
                 title: Text(
-                  'New',
+                  'Upload Files',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
@@ -91,7 +113,7 @@ class _AdminPageState extends State<AdminPage> {
             Card(
               child: ListTile(
                 dense: true,
-                trailing: Icon(
+                leading: Icon(
                   Icons.delete,
                   color: Colors.red,
                   size: 24,
@@ -106,6 +128,50 @@ class _AdminPageState extends State<AdminPage> {
                 ),
                 onTap: () {
                   print("Upload");
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                dense: true,
+                leading: Icon(
+                  Icons.person_outlined,
+                  color: Colors.red,
+                  size: 25,
+                ),
+                title: Text(
+                  'Profile',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                onTap: () {
+                  print("Profile");
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                dense: true,
+                leading: Icon(
+                  Icons.logout_outlined,
+                  color: Colors.red,
+                  size: 25,
+                ),
+                title: Text(
+                  'SignOut',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login', (Route<dynamic> route) => false);
                 },
               ),
             ),
