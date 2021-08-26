@@ -63,13 +63,13 @@ class _HomePageState extends State<HomePage> {
       try {
         ref.writeToFile(filePath);
       } on FirebaseException catch (e) {
-        print("Hello1" + e.message.toString());
+        print( e.message.toString());
       }
     } else {
       try {
         ref.writeToFile(filePath);
       } on FirebaseException catch (ex) {
-        print("Hello2" + ex.message.toString());
+        print( ex.message.toString());
       }
     }
   }
