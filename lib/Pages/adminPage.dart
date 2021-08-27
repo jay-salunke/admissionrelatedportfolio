@@ -18,7 +18,6 @@ class _AdminPageState extends State<AdminPage> {
   List<File> selectedFiles = [];
   List<Reference> files = [];
   List<Reference> filteredFiles = [];
-  String fileName = "";
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   FileDownload fileDownload = FileDownload();
