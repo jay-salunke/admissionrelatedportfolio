@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../FileDownload.dart';
+import '../loadingPage.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -15,71 +16,26 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   List<File> selectedFiles = [];
+  List<Reference> files = [];
+  List<Reference> filteredFiles = [];
   String fileName = "";
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  UploadTask uploadFileToStorage(File file) {
-    fileName = basename(file.path);
-    UploadTask task = firebaseStorage.ref(fileName).putFile(file);
+  FileDownload fileDownload = FileDownload();
 
-    return task;
+  @override
+  void initState() {
+    fileDownload.getFileNames().then((getFiles) {
+      setState(() {
+        files = filteredFiles = getFiles;
+      });
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     const mainColor = 0xFF910222;
-    Future getMultipleFiles() async {
-      try {
-        FilePickerResult? result =
-            await FilePicker.platform.pickFiles(allowMultiple: true);
-
-        if (result != null) {
-          selectedFiles.clear();
-          result.files.forEach((selectedFile) {
-            File file = new File(selectedFile.path.toString());
-            selectedFiles.add(file);
-            selectedFiles.forEach((file) {
-              uploadFileToStorage(file);
-              showFlash(
-                duration: const Duration(seconds: 4),
-                builder: (context, controller) {
-                  return Flash.bar(
-                    controller: controller,
-                    backgroundGradient: LinearGradient(
-                      colors: [Colors.yellow, Colors.amber],
-                    ),
-                    child: FlashBar(
-                      content: Text(
-                        '$fileName is uploaded successfully',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      icon: Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: Colors.green,
-                      ),
-                      showProgressIndicator: true,
-                    ),
-                    position: FlashPosition.top,
-                    margin: const EdgeInsets.all(10),
-                    forwardAnimationCurve: Curves.easeInOut,
-                    reverseAnimationCurve: Curves.decelerate,
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  );
-                },
-                context: context,
-              );
-            });
-          });
-        } else {
-          print("Selection is cancelled");
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('AdminPage'),
@@ -105,8 +61,40 @@ class _AdminPageState extends State<AdminPage> {
                     color: Theme.of(context).primaryColor,
                   ),
                 ),
-                onTap: () {
-                  getMultipleFiles();
+                onTap: () async {
+                  await fileDownload.getLocalStorageFiles(selectedFiles)
+                      ? showFlash(
+                          duration: const Duration(seconds: 4),
+                          builder: (context, controller) {
+                            return Flash.bar(
+                              controller: controller,
+                              backgroundGradient: LinearGradient(
+                                colors: [Colors.yellow, Colors.amber],
+                              ),
+                              child: FlashBar(
+                                content: Text(
+                                  ' ${selectedFiles.length == 1 ? "File is" : "Files are "} uploaded successfully',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                icon: Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: Colors.green,
+                                ),
+                                showProgressIndicator: true,
+                              ),
+                              position: FlashPosition.top,
+                              margin: const EdgeInsets.all(10),
+                              forwardAnimationCurve: Curves.easeInOut,
+                              reverseAnimationCurve: Curves.decelerate,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            );
+                          },
+                          context: context,
+                        )
+                      : print("File is not selected");
                 },
               ),
             ),
@@ -178,11 +166,73 @@ class _AdminPageState extends State<AdminPage> {
           ],
         ),
       ),
-      body: Center(
-        child: Text(
-          'Admin Page',
-        ),
-      ),
+      body: filteredFiles.length > 0
+          ? ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: filteredFiles.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      filteredFiles[index].name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 20,
+                      ),
+                    ),
+                    dense: true,
+                    trailing: IconButton(
+                      icon: Icon(Icons.download_outlined),
+                      onPressed: () async {
+                        final status = Permission.storage.request();
+                        if (await status.isGranted) {
+                          // downloadFile(index);
+                          fileDownload.downloadFile(filteredFiles, index);
+                          showFlash(
+                            context: context,
+                            duration: const Duration(seconds: 4),
+                            builder: (context, controller) {
+                              return Flash.bar(
+                                controller: controller,
+                                backgroundGradient: LinearGradient(
+                                  colors: [Colors.yellow, Colors.amber],
+                                ),
+                                child: FlashBar(
+                                  content: Text(
+                                    '${filteredFiles[index].name} is downloaded successfully',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: Colors.green,
+                                  ),
+                                  showProgressIndicator: true,
+                                ),
+                                position: FlashPosition.top,
+                                margin: const EdgeInsets.all(10),
+                                forwardAnimationCurve: Curves.easeInOut,
+                                reverseAnimationCurve: Curves.decelerate,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5)),
+                              );
+                            },
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Allow the permissions to download files'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                );
+              })
+          : LoaderPage(),
     );
   }
 }

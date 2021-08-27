@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:admission_portfolio/loadingPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../FileDownload.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,59 +18,25 @@ class _HomePageState extends State<HomePage> {
   List<Reference> filteredFiles = [];
   bool _isSearch = false;
 
-  getFileNames() async {
-    final getFilesData = (await FirebaseStorage.instance.ref().listAll()).items;
-    print(getFilesData);
-    return getFilesData;
-  }
-
   void _getInputValue(value) {
     setState(() {
       filteredFiles = files
-          .where((file) =>
-              file.name.toLowerCase()
-                  .contains(value.toLowerCase()))
+          .where(
+              (file) => file.name.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
 
+  FileDownload fileDownload = new FileDownload();
+
   @override
   void initState() {
-    getFileNames().then((value) {
+    fileDownload.getFileNames().then((value) {
       setState(() {
         files = filteredFiles = value;
       });
     });
     super.initState();
-  }
-
-  void downloadFile(int index) async {
-    Reference ref = filteredFiles[index];
-    String fileName = basenameWithoutExtension(filteredFiles[index].name);
-    File filePath =
-        new File('storage/emulated/0/Download/${filteredFiles[index].name}');
-    if (await filePath.exists()) {
-      int counter = 1;
-      String newFile = "";
-      while (await filePath.exists()) {
-        // my file.docx
-        newFile = fileName + " ($counter)";
-        filePath = File(
-            'storage/emulated/0/Download/${filteredFiles[index].name.replaceAll(fileName, newFile)}');
-        ++counter;
-      }
-      try {
-        ref.writeToFile(filePath);
-      } on FirebaseException catch (e) {
-        print( e.message.toString());
-      }
-    } else {
-      try {
-        ref.writeToFile(filePath);
-      } on FirebaseException catch (ex) {
-        print( ex.message.toString());
-      }
-    }
   }
 
   @override
@@ -161,7 +126,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
       body: filteredFiles.length > 0
           ? ListView.builder(
               scrollDirection: Axis.vertical,
@@ -182,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () async {
                         final status = Permission.storage.request();
                         if (await status.isGranted) {
-                          downloadFile(index);
+                          fileDownload.downloadFile(filteredFiles, index);
                           showFlash(
                             context: context,
                             duration: const Duration(seconds: 4),
